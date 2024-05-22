@@ -181,26 +181,19 @@ def make_property_bed_chart(table):
         go.Scatter(
             x=table.index,
             y=table['Damages_y'],
-            yaxis='y2',
-            name='Population Average')
+            name='Monthly Average')
     )
 
     fig.update_layout(title=dict(text='Total vs Average Damages',
                                  y=0.9,
-                                 x=0.5,
+                                 x=0.57,
                                  yanchor='top',
                                  xanchor='center'),
                       xaxis=dict(title_text='Unit Bedrooms'),
-                      yaxis=dict(title_text='Total Damages',
+                      yaxis=dict(title_text='Damages',
                                  side='left',
                                  tickprefix='$',
                                  separatethousands=True),
-                      yaxis2=dict(title_text='Lawsuit Average',
-                                  side='right',
-                                  range=[0, 20],
-                                  overlaying='y',
-                                  tickmode='sync',
-                                  tickprefix='$'),
                       legend=dict(orientation='h',
                                   y=1.15,
                                   x=0.5,
