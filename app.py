@@ -3,8 +3,8 @@ from pathlib import Path
 import pandas as pd
 import functions.graphs as gg
 from functions.damage_calculations import (
-    DamagesData as DD,
-    DamagesProperty as DP,
+    # DamagesData as DD,
+    PropertyDamages as PD,
     UnitDamages as UD,
     MonthlyDamages as MD,
     PropertyGroupbyDamages as PGD,
@@ -18,9 +18,9 @@ PAGE_ICON = ":wave:"
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 
 
-@st.cache_data
-def load_damages_data(file):
-    return pd.read_csv(file, parse_dates=['Date'])
+# LOADER SECTION
+################################################################################################################
+
 
 
 @st.cache_data
@@ -45,11 +45,11 @@ def load_property_groupby_table(file):
 
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 
-master_file = current_dir / "data" / "master_may14.csv"
-m_df = DD(load_damages_data(master_file))
-
 property_file = current_dir / "data" / "property_summary_table.csv"
-property_table = DP(load_property_damages(property_file))
+property_table = PD(load_property_damages(property_file))
+
+property_groupby_file = current_dir / "data" / "property_groupby_all.csv"
+property_groupby_table = PGD(load_property_groupby_table(property_groupby_file))
 
 monthly_damage_file = current_dir / "data" / "monthly_damages.csv"
 month_table = MD(load_monthly_damages(monthly_damage_file))
@@ -57,24 +57,34 @@ month_table = MD(load_monthly_damages(monthly_damage_file))
 unit_damages_file = current_dir / "data" / "unit_damages.csv"
 unit_table = UD(load_unit_damages(unit_damages_file))
 
-property_groupby_file = current_dir / "data" / "property_groupby_all.csv"
-property_groupby_table = PGD(load_property_groupby_table(property_groupby_file))
 
+### DATA SOURCE FILE
+###############################################################
+# @st.cache_data
+# def load_damages_data(file):
+#     return pd.read_csv(file, parse_dates=['Date'])
+
+# master_file = current_dir / "data" / "master_may14.csv"
+# m_df = DD(load_damages_data(master_file))
+###############################################################
+
+
+# LAYOUT SECTION
 ################################################################################################################
 
 col = st.columns((1,3,1))
 with col[1]:
-    st.markdown("<header style='text-align: center; font-family:verdana; font-size:28px; color:gray; "
+    st.markdown("<header style='text-align: center; font-family:verdana; font-size:26px; color:gray; "
                 "border:1px solid gray; border-top-left-radius:35px; border-top-right-radius:35px; "
-                "background-color:yellow'>James C. "
+                "background-color:#F7F00C'>James C. "
                 "Mattingly</header>",
                 unsafe_allow_html=True)
 
 col = st.columns((1,3,1))
 with col[1]:
-    st.markdown("<header style='text-align: center; font-family:verdana; font-size:28px; color:gray; "
+    st.markdown("<header style='text-align: center; font-family:verdana; font-size:26px; color:gray; "
                 "border:1px solid gray; border-bottom-left-radius:35px; border-bottom-right-radius:35px;"
-                "background-color:yellow'>Tynan Litigation Support</header>",
+                "background-color:#F7F00C'>Tynan Litigation Support</header>",
                 unsafe_allow_html=True)
 
 st.markdown("")
@@ -121,11 +131,13 @@ table = month_table.table
 fig = gg.make_monthly_line(table)
 st.plotly_chart(fig, use_container_width=True)
 
+
 # ROW 4
 st.markdown("")
 st.markdown("---")
 st.markdown("<h2 style='text-align: center'>Property Summary of Damages</h2>", unsafe_allow_html=True)
 st.markdown("")
+
 
 # ROW 5
 col = st.columns((.5, 8, .5))
@@ -134,6 +146,7 @@ with col[1]:
     table = unit_table.table
     fig = gg.make_unit_strip(table)
     st.plotly_chart(fig, use_container_width=True)
+
 
 # ROW 6
 col = st.columns((.5, 8, .5))
@@ -157,6 +170,7 @@ with col[1]:
 
                  }, hide_index=False)
 
+
 # ROW 7
 st.markdown("---")
 st.markdown("<h3 style='text-align: center'>Population Damages</h3>", unsafe_allow_html=True)
@@ -173,6 +187,7 @@ with col[2]:
     fig = gg.make_bed_bar(table)
     st.plotly_chart(fig, use_container_width=True)
 
+
 # ROW 8
 st.markdown("---")
 st.markdown("<h3 style='text-align: center'>Property View of Damages</h3>", unsafe_allow_html=True)
@@ -181,6 +196,7 @@ col = st.columns((2, 6))
 
 with col[0]:
     select_property = st.selectbox("Select Property", property_list)
+
 
 # ROW 9
 col = st.columns((3, 3))
@@ -191,13 +207,15 @@ with col[0]:
     st.plotly_chart(fig, use_container_width=True)
 
 with col[1]:
-    table = property_groupby_table.property_bed_damages(select_property)
+    table = property_groupby_table.property_beds_damages(select_property)
     fig = gg.make_property_bed_bar(table)
     st.plotly_chart(fig, use_container_width=True)
+
 
 # ROW 10
 st.markdown("---")
 st.markdown("<h4 style='text-align: center'>Customize View</h4>", unsafe_allow_html=True)
+
 
 # ROW 11
 with st.form("property_bed_form"):
@@ -218,6 +236,6 @@ with st.form("property_bed_form"):
     submitted = st.form_submit_button("Submit")
 
     if submitted:
-        table = property_groupby_table.select_merge_property_bed(p_choice, y_choice, m_choice)
+        table = property_groupby_table.select_merge_property_beds(p_choice, y_choice, m_choice)
         fig = gg.make_property_bed_chart(table)
         st.plotly_chart(fig, use_container_width=True)

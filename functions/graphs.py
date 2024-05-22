@@ -174,7 +174,7 @@ def make_property_bed_chart(table):
         data=go.Bar(
             x=table.index,
             y=table['Damages_x'],
-            name='Property Total', )
+            name='Month Total', )
     )
 
     fig.add_trace(
@@ -185,10 +185,11 @@ def make_property_bed_chart(table):
     )
 
     fig.update_layout(title=dict(text='Total vs Average Damages',
-                                 y=0.9,
+                                 y=0.93,
                                  x=0.57,
                                  yanchor='top',
-                                 xanchor='center'),
+                                 xanchor='center',
+                                 font=dict(size=24)),
                       xaxis=dict(title_text='Unit Bedrooms'),
                       yaxis=dict(title_text='Damages',
                                  side='left',
