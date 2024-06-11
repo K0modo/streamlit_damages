@@ -74,17 +74,17 @@ unit_table = UD(load_unit_damages(unit_damages_file))
 
 col = st.columns((1,3,1))
 with col[1]:
-    st.markdown("<header style='text-align: center; font-family:verdana; font-size:26px; color:gray; "
-                "border:1px solid gray; border-top-left-radius:35px; border-top-right-radius:35px; "
-                "background-color:#F7F00C'>James C. "
+    st.markdown("<header style='text-align: center; font-family:verdana; font-size:26px; color:white; "
+                "border:2px solid gray; border-top-left-radius:35px; border-top-right-radius:35px; "
+                "background-color:#007bc0'>James C. "
                 "Mattingly</header>",
                 unsafe_allow_html=True)
 
 col = st.columns((1,3,1))
 with col[1]:
-    st.markdown("<header style='text-align: center; font-family:verdana; font-size:26px; color:gray; "
-                "border:1px solid gray; border-bottom-left-radius:35px; border-bottom-right-radius:35px;"
-                "background-color:#F7F00C'>Tynan Litigation Support</header>",
+    st.markdown("<header style='text-align: center; font-family:verdana; font-size:26px; color:white; "
+                "border:2px solid gray; border-bottom-left-radius:35px; border-bottom-right-radius:35px;"
+                "background-color:#007bc0'>Tynan Litigation Support</header>",
                 unsafe_allow_html=True)
 
 st.markdown("")
